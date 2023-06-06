@@ -16,14 +16,21 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-1
+2
 (
+    blade
+    {
+        type            overset;
+        nFaces          162;
+        startFace       3114;
+        faces           ( ( 0 8 20 12 ) ( 8 9 21 20 ) ( 9 1 13 21 ) ( 1 13 14 2 ) ( 2 14 22 10 ) ( 11 10 22 23 ) ( 3 11 23 15 ) ( 0 12 15 3 ) );
+    }
     defaultFaces
     {
         type            empty;
         inGroups        1(empty);
-        nFaces          3588;
-        startFace       3114;
+        nFaces          3426;
+        startFace       3276;
     }
 )
 

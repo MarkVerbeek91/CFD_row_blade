@@ -16,16 +16,25 @@ FoamFile
 
 scale    1;
 
+
+xmin    -1.5;
+xmax     1.5;
+ymin    -1.5;
+ymax     1.5;
+zmin    -0.05;
+zmax     0;
+
 vertices
 (
-    ( -1.5 -1.5 0 )
-    ( 1.5 -1 0 )
-    ( 1.5 1 0 )
-    ( -1.5 1 0 )
-    ( -1.5 -1 0.05 )
-    ( 1.5 -1 0.05 )
-    ( 1.5 1 0.05 )
-    ( -1.5 1 0.05 )
+    ( $xmin $ymin $zmin )
+    ( $xmax $ymin $zmin )
+    ( $xmax $ymax $zmin )
+    ( $xmin $ymax $zmin )
+
+    ( $xmin $ymin $zmax )
+    ( $xmax $ymin $zmax )
+    ( $xmax $ymax $zmax )
+    ( $xmin $ymax $zmax )
 );
 
 blocks
