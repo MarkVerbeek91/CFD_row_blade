@@ -1,0 +1,43 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2212                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _f8e05934-20230403 OPENFOAM=2212 patch=230110 version=2212
+Arch   : "LSB;label=32;scalar=64"
+Exec   : renumberMesh -constant -overwrite
+Date   : May 31 2023
+Time   : 22:31:52
+Host   : LBNL732420
+PID    : 2675
+I/O    : uncollated
+Case   : /home/mverbeek/project/openfoam/tutorials/multiphase/overInterDyMFoam/rowBlade/blade
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = constant
+
+Mesh region0 size: 1600
+Before renumbering :
+    band           : 40
+    profile        : 62439
+
+Using default renumberMethod.
+
+Selecting renumberMethod CuthillMcKee
+
+
+After renumbering :
+    band           : 40
+    profile        : 43420
+
+Writing mesh to "constant"
+End
+
