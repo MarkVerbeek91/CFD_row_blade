@@ -9,29 +9,49 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      createPatchDict;
+    class       volScalarField;
+    object      k;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-pointSync false;
+dimensions      [0 2 -2 0 0 0 0];
 
-patches
-(
+internalField   uniform 0.00521;
+
+boundaryField
+{
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    inlet
     {
-        name oversetPatch;
-
-        patchInfo
-        {
-            type    overset;
-            value   uniform 0;
-        }
-
-        constructFrom patches;
-
-        patches (MRF_REGION);
+        type            fixedValue;
+        value           $internalField;
     }
-);
+
+    "(atmosphere|outlet)"
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    "(HULL*.*)"
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+
+    "(BLADES|HUB_DISK|HUB)"
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+
+    "(overset-1|oversetPatch)"
+    {
+        type           overset;
+    }
+}
 
 
 // ************************************************************************* //

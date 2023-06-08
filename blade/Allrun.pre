@@ -5,6 +5,17 @@ cd "${0%/*}" || exit                                # Run from this directory
 
 runApplication blockMesh
 
-runApplication snappyHexMesh -overwrite
+# Select cellSets
+runApplication -s 1 topoSet
+
+runApplication subsetMesh box -patch hole -overwrite
+
+# Select cellSets
+runApplication -s 2 topoSet
+
+restore0Dir
+
+# Use cellSets to write zoneID
+runApplication setFields
 
 #------------------------------------------------------------------------------

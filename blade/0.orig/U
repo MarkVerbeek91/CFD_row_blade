@@ -9,29 +9,49 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      topoSetDict;
+    class       volVectorField;
+    object      U;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-actions
-(
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    "(BLADES|HUB_DISK|HUB|HUB_COVER|HULL*.*)"
     {
-        name    cHullProp;
-        type    cellSet;
-        action  new;
-        source  cellToCell;
-        set     c1;
+        type            movingWallVelocity;
+        value           uniform (0 0 0);
     }
 
+    inlet
     {
-        name    cHullProp;
-        type    cellSet;
-        action  add;
-        source  cellToCell;
-        set     c2;
+        type            fixedValue;
+        value           $internalField;
     }
-);
+
+    outlet
+    {
+        type            inletOutlet;
+        value           uniform (0 0 0);
+        inletValue      uniform (0 0 0 );
+    }
+
+    "(atmosphere)"
+    {
+        type            pressureInletOutletVelocity;
+        value           $internalField;
+    }
+
+    "(overset-1|oversetPatch)"
+    {
+        type           overset;
+    }
+}
 
 
 // ************************************************************************* //

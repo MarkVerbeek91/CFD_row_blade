@@ -9,58 +9,46 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      controlDict;
+    class       volScalarField;
+    object      p_rgh;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-libs            (overset rigidBodyDynamics);
+dimensions      [1 -1 -2 0 0 0 0];
 
-application     overInterDyMFoam;
+internalField   uniform 0;
 
-startFrom       latestTime;
-
-startTime       0;
-
-stopAt          endTime;
-
-endTime         4;
-
-deltaT          1e-5;
-
-writeControl    adjustableRunTime;
-
-writeInterval   0.25;
-
-purgeWrite      0;
-
-writeFormat     binary;
-
-writePrecision  8;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   8;
-
-runTimeModifiable yes;
-
-adjustTimeStep  yes;
-
-maxAlphaCo      15;
-
-maxCo           70;
-
-maxDeltaT       1;
-
-functions
+boundaryField
 {
-    minMax1
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    inlet
     {
-        libs            (fieldFunctionObjects);
-        type            fieldMinMax;
-        fields          (U p);
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+
+    "(atmosphere|outlet)"
+    {
+        type            totalPressure;
+        p0              $internalField;
+    }
+
+    "(HULL*.*)"
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+
+    "(BLADES|HUB_DISK|HUB)"
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+
+    "(overset-1|oversetPatch)"
+    {
+        type            overset;
     }
 }
 

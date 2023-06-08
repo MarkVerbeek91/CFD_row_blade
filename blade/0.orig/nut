@@ -7,19 +7,43 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version         2.0;
-    format          ascii;
-    class           dictionary;
-    object          fvOptions;
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      nut;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-damp
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   uniform 1e-05;
+
+boundaryField
 {
-    type            velocityDampingConstraint;
-    active          true;
-    selectionMode   all;
-    UMax            14;
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    outlet
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    "(atmosphere|inlet)"
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    "(BLADES|HUB_DISK|HUB|HUB_COVER|HULL*.*)"
+    {
+        type            nutkWallFunction;
+        value           $internalField;
+    }
+
+    "(overset-1|oversetPatch)"
+    {
+        type           overset;
+    }
 }
 
 

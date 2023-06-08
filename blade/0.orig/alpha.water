@@ -9,56 +9,39 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      topoSetDict;
+    class       volScalarField;
+    object      alpha.water;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-actions
-(
-    {
-        name    c0;
-        type    cellSet;
-        action  new;
-        source  regionsToCell;
+dimensions      [0 0 0 0 0 0 0];
 
-        insidePoints ((-6 0 0.0));
+internalField   uniform 0;
+
+boundaryField
+{
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    "(outlet|inlet)"
+    {
+        type            variableHeightFlowRate;
+        lowerBound      0;
+        upperBound      1;
+        value           $internalField;
     }
 
+    atmosphere
     {
-        name    c1;
-        type    cellSet;
-        action  new;
-        source  cellToCell;
-
-        set     c0;
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
     }
 
+    "(BLADES|HUB_DISK|HUB|HUB_COVER|HULL).*"
     {
-        name    c1;
-        type    cellSet;
-        action  invert;
+        type            zeroGradient;
     }
-
-    {
-        name    c2;
-        type    cellSet;
-        action  new;
-        source  regionsToCell;
-
-        set     c1;
-        insidePoints ((-3.4 0.1 0.1));
-    }
-
-    {
-        name    c1;
-        type    cellSet;
-        action  subtract;
-        source  cellToCell;
-
-        set     c2;
-    }
-);
+}
 
 
 // ************************************************************************* //

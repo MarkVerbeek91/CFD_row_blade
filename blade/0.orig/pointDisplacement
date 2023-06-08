@@ -9,63 +9,43 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      setFieldsDict;
+    class       pointVectorField;
+    object      pointDisplacement;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-defaultFieldValues
-(
-    volScalarFieldValue zoneID 123
-    volScalarFieldValue alpha.water 0
-);
+dimensions      [0 1 0 0 0 0 0];
 
-regions
-(
-    // Set cell values
-    // (does zerogradient on boundaries)
-    cellToCell
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    #includeEtc "caseDicts/setConstraintTypes"
+
+    ".*"
     {
-        set c0;
-
-        fieldValues
-        (
-            volScalarFieldValue zoneID 0
-        );
+        type            fixedValue;
+        value           uniform (0 0 0);
     }
 
-    cellToCell
+    "(HULL_DISK|HULL|BLADES|HUB_DISK|HUB)"
     {
-        set c1;
-
-        fieldValues
-        (
-            volScalarFieldValue zoneID 2
-        );
+        type            calculated;
+        value           uniform (0 0 0);
     }
 
-    cellToCell
+    oversetPatch
     {
-        set c2;
-
-        fieldValues
-        (
-            volScalarFieldValue zoneID 1
-        );
+        patchType       overset;
+        type            zeroGradient;
     }
 
-    // Set cell values
-    // (does zerogradient on boundaries)
-    boxToCell
+    overset-1
     {
-        box (-1000 -1000 -1000) (1000 1000 0);
-
-        fieldValues
-        (
-            volScalarFieldValue alpha.water 1
-        );
+        patchType       overset;
+        type            zeroGradient;
     }
-);
+}
 
 
 // ************************************************************************* //
